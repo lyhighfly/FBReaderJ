@@ -68,7 +68,7 @@ static void fillMetaInfo(JNIEnv* env, jobject javaBook, Book &book) {
 		const Author &author = *authors[i];
 		JString name(env, author.name(), false);
 		JString key(env, author.sortKey(), false);
-		AndroidUtil::Method_Book_addAuthor->call(javaBook, name.j(), key.j());
+		AndroidUtil::Method_Book_addAuthor->call(javaBook, name.j());
 	}
 
 	const TagList &tags = book.tags();
