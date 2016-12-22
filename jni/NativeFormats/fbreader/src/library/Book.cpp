@@ -31,6 +31,8 @@
 #include "Author.h"
 #include "Tag.h"
 #include "UID.h"
+#include <ZLLogger.h>
+#include <sstream>
 
 #include "../formats/FormatPlugin.h"
 //#include "../migration/BookInfo.h"
@@ -48,13 +50,25 @@ shared_ptr<Book> Book::createBook(
 	int id,
 	const std::string &encoding,
 	const std::string &language,
-	const std::string &title
+	const std::string &title,
+    const int booktype,
+    const std::size_t cid
 ) {
 	Book *book = new Book(file, id);
 	book->setEncoding(encoding);
 	book->setLanguage(language);
 	book->setTitle(title);
+    book->setBookType(booktype);
+    book->setBookCid(cid);
 	return book;
+}
+
+void Book::setBookType(const int type){
+    myBookType = type;
+}
+
+void Book::setBookCid(const std::size_t cid){
+    myBookCid = cid;
 }
 
 /*
@@ -90,13 +104,22 @@ shared_ptr<Book> Book::loadFromJavaBook(JNIEnv *env, jobject javaBook) {
 	const std::string title = AndroidUtil::Method_Book_getTitle->callForCppString(javaBook);
 	const std::string language = AndroidUtil::Method_Book_getLanguage->callForCppString(javaBook);
 	const std::string encoding = AndroidUtil::Method_Book_getEncodingNoDetection->callForCppString(javaBook);
-
-	return createBook(ZLFile(path), 0, encoding, language, title);
+    const jint booktype = AndroidUtil::Method_Book_getBookTypeInt->call(javaBook);
+    const std::size_t cid = AndroidUtil::Method_Book_getCid->call(javaBook);
+    
+    std::stringstream stream1;
+    stream1<<booktype;
+    std::stringstream stream2;
+    stream2<<cid;
+    
+    
+    ZLLogger::Instance().logE("liuyu", "get BookType:"+stream1.str()+"  cid:"+stream2.str());
+	return createBook(ZLFile(path), 0, encoding, language, title, booktype, cid);
 }
 
 
 bool Book::addTag(shared_ptr<Tag> tag) {
-	if (tag.isNull()) {
+    if (tag.isNull()){
 		return false;
 	}
 	TagList::const_iterator it = std::find(myTags.begin(), myTags.end(), tag);

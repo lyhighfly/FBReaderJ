@@ -44,6 +44,8 @@ protected:
 		const std::string &directoryName, const std::string &fileExtension, FontManager &fontManager);
 	ZLTextModel(const std::string &id, const std::string &language,
 		shared_ptr<ZLCachedMemoryAllocator> allocator, FontManager &fontManager);
+    ZLTextModel(const std::string &id, const std::string &language, const std::size_t rowSize,
+                const std::string &directoryName, const std::string &fileExtension, FontManager &fontManager, const int booktype, const std::size_t bookcid);
 
 public:
 	virtual ~ZLTextModel();
@@ -120,8 +122,12 @@ class ZLTextPlainModel : public ZLTextModel {
 public:
 	ZLTextPlainModel(const std::string &id, const std::string &language, const std::size_t rowSize,
 			const std::string &directoryName, const std::string &fileExtension, FontManager &fontManager);
+    
 	ZLTextPlainModel(const std::string &id, const std::string &language,
 		shared_ptr<ZLCachedMemoryAllocator> allocator, FontManager &fontManager);
+    
+    ZLTextPlainModel(const std::string &id, const std::string &language, const std::size_t rowSize,
+                     const std::string &directoryName, const std::string &fileExtension, FontManager &fontManager, const int booktype, const std::size_t bookcid);
 	void createParagraph(ZLTextParagraph::Kind kind);
 };
 

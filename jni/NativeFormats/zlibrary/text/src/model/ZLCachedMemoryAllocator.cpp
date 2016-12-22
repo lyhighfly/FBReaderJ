@@ -42,6 +42,21 @@ ZLCachedMemoryAllocator::ZLCachedMemoryAllocator(const std::size_t rowSize,
 	ZLFile(directoryName).directory(true);
 }
 
+ZLCachedMemoryAllocator::ZLCachedMemoryAllocator(const std::size_t rowSize, const std::string &directoryName, const std::string &fileExtension, const int bookType, const std::size_t bookCid):
+myRowSize(rowSize),
+myCurrentRowSize(0),
+myOffset(0),
+myHasChanges(false),
+myFailed(false),
+myDirectoryName(directoryName),
+myBookType(bookType),
+myBookCid(bookCid),
+myFileExtension(fileExtension) {
+    ZLFile(directoryName).directory(true);
+    
+    
+}
+
 ZLCachedMemoryAllocator::~ZLCachedMemoryAllocator() {
 	flush();
 	for (std::vector<char*>::const_iterator it = myPool.begin(); it != myPool.end(); ++it) {
@@ -59,11 +74,15 @@ void ZLCachedMemoryAllocator::flush() {
 	writeCache(myOffset + 2);
 	myHasChanges = false;
 }
-
+//if booktype == local use index named file; if booktype == Net  use bookcid named file; add by liuyu
 std::string ZLCachedMemoryAllocator::makeFileName(std::size_t index) {
 	std::string name(myDirectoryName);
 	name.append("/");
-	ZLStringUtil::appendNumber(name, index);
+    if(myBookType == 1){
+        ZLStringUtil::appendNumber(name, myBookCid);
+    }else{
+        ZLStringUtil::appendNumber(name, index);
+    }
 	return name.append(".").append(myFileExtension);
 }
 

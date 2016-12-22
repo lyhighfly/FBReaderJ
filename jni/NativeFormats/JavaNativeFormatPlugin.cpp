@@ -29,6 +29,7 @@
 #include "fbreader/src/library/Tag.h"
 #include "fbreader/src/library/UID.h"
 
+
 static shared_ptr<FormatPlugin> findCppPlugin(jobject base) {
 	const std::string fileType = AndroidUtil::Method_NativeFormatPlugin_supportedFileType->callForCppString(base);
 	return PluginCollection::Instance().pluginByType(fileType);
@@ -222,13 +223,18 @@ static jobject createTextModel(JNIEnv *env, jobject javaModel, ZLTextModel &mode
 	jstring directoryName = env->NewStringUTF(model.allocator().directoryName().c_str());
 	jstring fileExtension = env->NewStringUTF(model.allocator().fileExtension().c_str());
 	jint blocksNumber = (jint) model.allocator().blocksNumber();
+    
+    jobject javaBook = AndroidUtil::Field_BookModel_Book->value(javaModel);
+    jint bookType = AndroidUtil::Method_Book_getBookTypeInt->call(javaBook);
+    jlong bookCid = AndroidUtil::Method_Book_getCid->call(javaBook);
 
 	jobject textModel = AndroidUtil::Method_BookModel_createTextModel->call(
 		javaModel,
 		id, language,
 		paragraphsNumber, entryIndices, entryOffsets,
 		paragraphLenghts, textSizes, paragraphKinds,
-		directoryName, fileExtension, blocksNumber
+		directoryName, fileExtension, blocksNumber,
+        bookType, bookCid
 	);
 
 	if (env->ExceptionCheck()) {
@@ -282,9 +288,11 @@ JNIEXPORT jint JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPlugin
 	const std::string cacheDir = AndroidUtil::fromJavaString(env, javaCacheDir);
 
 	jobject javaBook = AndroidUtil::Field_BookModel_Book->value(javaModel);
-
+    
 	shared_ptr<Book> book = Book::loadFromJavaBook(env, javaBook);
+    
 	shared_ptr<BookModel> model = new BookModel(book, javaModel, cacheDir);
+    
 	if (!plugin->readModel(*model)) {
 		return 2;
 	}
@@ -300,13 +308,16 @@ JNIEXPORT jint JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPlugin
 
 	shared_ptr<ZLTextModel> textModel = model->bookTextModel();
 	jobject javaTextModel = createTextModel(env, javaModel, *textModel);
+    
 	if (javaTextModel == 0) {
 		return 5;
 	}
+    
 	AndroidUtil::Method_BookModel_setBookTextModel->call(javaModel, javaTextModel);
 	if (env->ExceptionCheck()) {
 		return 6;
 	}
+    
 	env->DeleteLocalRef(javaTextModel);
 
 	const std::map<std::string,shared_ptr<ZLTextModel> > &footnotes = model->footnotes();
@@ -322,6 +333,7 @@ JNIEXPORT jint JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPlugin
 		}
 		env->DeleteLocalRef(javaFootnoteModel);
 	}
+    
 
 	const std::vector<std::vector<std::string> > familyLists = model->fontManager().familyLists();
 	for (std::vector<std::vector<std::string> >::const_iterator it = familyLists.begin(); it != familyLists.end(); ++it) {
@@ -334,6 +346,7 @@ JNIEXPORT jint JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPlugin
 		AndroidUtil::Method_BookModel_registerFontFamilyList->call(javaModel, jList);
 		env->DeleteLocalRef(jList);
 	}
+   
 
 	const std::map<std::string,shared_ptr<FontEntry> > entries = model->fontManager().entries();
 	for (std::map<std::string,shared_ptr<FontEntry> >::const_iterator it = entries.begin(); it != entries.end(); ++it) {
