@@ -1,5 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 
+LOCAL_LDLIBS+= -L$(SYSROOT)/usr/lib -llog
+
 include $(CLEAR_VARS)
 
 LOCAL_MODULE                  := DeflatingDecompressor-v3

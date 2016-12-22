@@ -29,6 +29,7 @@
 #include "../util/MiscUtil.h"
 #include "../../library/Book.h"
 #include "../../bookmodel/BookModel.h"
+#include <ZLLogger.h>
 
 const std::string HtmlPlugin::supportedFileType() const {
 	return "HTML";
@@ -70,7 +71,9 @@ bool HtmlPlugin::readModel(BookModel &model) const {
 
 	std::string directoryPrefix = MiscUtil::htmlDirectoryPrefix(file.path());
 	HtmlBookReader reader(directoryPrefix, model, format, book.encoding());
-	reader.setFileName(MiscUtil::htmlFileName(file.path()));
+    std::string filename = MiscUtil::htmlFileName(file.path());
+    ZLLogger::Instance().logE("liuyu","HtmlPlugin readModel:"+filename);
+	reader.setFileName(filename);
 	reader.readDocument(*stream);
 
 	return true;

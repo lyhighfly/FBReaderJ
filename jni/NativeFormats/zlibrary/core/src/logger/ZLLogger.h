@@ -40,6 +40,8 @@ public:
 	void registerClass(const std::string &className);
 	void print(const std::string &className, const std::string &message) const;
 	void println(const std::string &className, const std::string &message) const;
+    void logE(const std::string &tag, const std::string &message) const;
+    void logD(const std::string &tag, const std::string &message) const;
 
 private:
 	std::set<std::string> myRegisteredClasses;

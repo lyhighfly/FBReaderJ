@@ -56,3 +56,11 @@ void ZLLogger::print(const std::string &className, const std::string &message) c
 void ZLLogger::println(const std::string &className, const std::string &message) const {
 	print(className, message);
 }
+
+void ZLLogger::logE(const std::string &tag, const std::string &message) const{
+    __android_log_print(ANDROID_LOG_ERROR, tag.c_str(), message.c_str());
+}
+
+void ZLLogger::logD(const std::string &tag, const std::string &message) const{
+    __android_log_print(ANDROID_LOG_DEBUG, tag.c_str(), message.c_str());
+}
