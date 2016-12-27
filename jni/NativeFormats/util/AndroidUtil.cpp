@@ -115,7 +115,7 @@ shared_ptr<VoidMethod> AndroidUtil::Method_Book_addAuthor;
 shared_ptr<VoidMethod> AndroidUtil::Method_Book_addTag;
 shared_ptr<VoidMethod> AndroidUtil::Method_Book_addUid;
 shared_ptr<IntMethod> AndroidUtil::Method_Book_getBookTypeInt;
-shared_ptr<LongMethod> AndroidUtil::Method_Book_getCid;
+shared_ptr<StringMethod> AndroidUtil::Method_Book_getCid;
 
 shared_ptr<StaticObjectMethod> AndroidUtil::StaticMethod_Tag_getTag;
 
@@ -198,7 +198,7 @@ bool AndroidUtil::init(JavaVM* jvm) {
 	Method_Book_addTag = new VoidMethod(Class_AbstractBook, "addTag", "(Lorg/geometerplus/fbreader/book/Tag;)");
 	Method_Book_addUid = new VoidMethod(Class_AbstractBook, "addUid", "(Ljava/lang/String;Ljava/lang/String;)");
     Method_Book_getBookTypeInt = new IntMethod(Class_AbstractBook, "getBookTypeInt","()");
-    Method_Book_getCid = new LongMethod(Class_AbstractBook, "getCid", "()");
+    Method_Book_getCid = new StringMethod(Class_AbstractBook, "getCid", "()");
     
 
 	StaticMethod_Tag_getTag = new StaticObjectMethod(Class_Tag, "getTag", Class_Tag, "(Lorg/geometerplus/fbreader/book/Tag;Ljava/lang/String;)");
@@ -207,7 +207,7 @@ bool AndroidUtil::init(JavaVM* jvm) {
 	Method_BookModel_initInternalHyperlinks = new VoidMethod(Class_BookModel, "initInternalHyperlinks", "(Ljava/lang/String;Ljava/lang/String;I)");
 	Method_BookModel_addTOCItem = new VoidMethod(Class_BookModel, "addTOCItem", "(Ljava/lang/String;I)");
 	Method_BookModel_leaveTOCItem = new VoidMethod(Class_BookModel, "leaveTOCItem", "()");
-	Method_BookModel_createTextModel = new ObjectMethod(Class_BookModel, "createTextModel", Class_ZLTextModel, "(Ljava/lang/String;Ljava/lang/String;I[I[I[I[I[BLjava/lang/String;Ljava/lang/String;IIJ)");
+	Method_BookModel_createTextModel = new ObjectMethod(Class_BookModel, "createTextModel", Class_ZLTextModel, "(Ljava/lang/String;Ljava/lang/String;I[I[I[I[I[BLjava/lang/String;Ljava/lang/String;IILjava/lang/String;)");
 	Method_BookModel_setBookTextModel = new VoidMethod(Class_BookModel, "setBookTextModel", "(Lorg/geometerplus/zlibrary/text/model/ZLTextModel;)");
 	Method_BookModel_setFootnoteModel = new VoidMethod(Class_BookModel, "setFootnoteModel", "(Lorg/geometerplus/zlibrary/text/model/ZLTextModel;)");
 	Method_BookModel_addImage = new VoidMethod(Class_BookModel, "addImage", "(Ljava/lang/String;Lorg/geometerplus/zlibrary/core/image/ZLImage;)");

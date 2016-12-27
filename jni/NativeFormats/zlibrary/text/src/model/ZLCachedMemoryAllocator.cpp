@@ -27,6 +27,8 @@
 #include <ZLDir.h>
 #include <ZLOutputStream.h>
 #include <ZLStringUtil.h>
+#include <ZLLogger.h>
+#include <sstream>
 
 #include "ZLCachedMemoryAllocator.h"
 
@@ -42,7 +44,7 @@ ZLCachedMemoryAllocator::ZLCachedMemoryAllocator(const std::size_t rowSize,
 	ZLFile(directoryName).directory(true);
 }
 
-ZLCachedMemoryAllocator::ZLCachedMemoryAllocator(const std::size_t rowSize, const std::string &directoryName, const std::string &fileExtension, const int bookType, const std::size_t bookCid):
+ZLCachedMemoryAllocator::ZLCachedMemoryAllocator(const std::size_t rowSize, const std::string &directoryName, const std::string &fileExtension, const int bookType, const std::string bookCid):
 myRowSize(rowSize),
 myCurrentRowSize(0),
 myOffset(0),
@@ -79,7 +81,8 @@ std::string ZLCachedMemoryAllocator::makeFileName(std::size_t index) {
 	std::string name(myDirectoryName);
 	name.append("/");
     if(myBookType == 1){
-        ZLStringUtil::appendNumber(name, myBookCid);
+        ZLStringUtil::appendStr(name, myBookCid);
+        ZLLogger::Instance().logE("liuyu", "Net Book write cache cid :"+myBookCid);
     }else{
         ZLStringUtil::appendNumber(name, index);
     }
@@ -92,6 +95,7 @@ void ZLCachedMemoryAllocator::writeCache(std::size_t blockLength) {
 	}
 	const std::size_t index = myPool.size() - 1;
 	const std::string fileName = makeFileName(index);
+    ZLLogger::Instance().logE("liuyu", "write cache file :"+fileName);
 	ZLFile file(fileName);
 	shared_ptr<ZLOutputStream> stream = file.outputStream();
 	if (stream.isNull() || !stream->open()) {

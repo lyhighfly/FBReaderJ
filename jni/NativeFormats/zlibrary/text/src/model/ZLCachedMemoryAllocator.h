@@ -28,7 +28,7 @@ class ZLCachedMemoryAllocator {
 
 public:
 	ZLCachedMemoryAllocator(const std::size_t rowSize, const std::string &directoryName, const std::string &fileExtension);
-    ZLCachedMemoryAllocator(const std::size_t rowSize, const std::string &directoryName, const std::string &fileExtension, const int bookType, const std::size_t bookCid);
+    ZLCachedMemoryAllocator(const std::size_t rowSize, const std::string &directoryName, const std::string &fileExtension, const int bookType, const std::string bookCid);
 	~ZLCachedMemoryAllocator();
 
 	char *allocate(std::size_t size);
@@ -66,7 +66,7 @@ private:
 	const std::string myFileExtension;
     
     int myBookType;
-    std::size_t myBookCid;
+    std::string myBookCid;
 
 private: // disable copying
 	ZLCachedMemoryAllocator(const ZLCachedMemoryAllocator&);

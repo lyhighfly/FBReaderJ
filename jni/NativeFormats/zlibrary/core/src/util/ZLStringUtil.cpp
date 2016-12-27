@@ -21,6 +21,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <locale.h>
+#include <sstream>
 
 #include "ZLStringUtil.h"
 
@@ -61,6 +62,17 @@ void ZLStringUtil::appendNumber(std::string &str, unsigned int n) {
 		*ptr-- = '0' + n % 10;
 		n /= 10;
 	}
+}
+
+void ZLStringUtil::appendLong(std::string &str, const std::size_t n){
+    std::stringstream stream;
+    stream<<n;
+    std::string nstring = stream.str();
+    str.append(nstring);
+}
+
+void ZLStringUtil::appendStr(std::string &str, const std::string &added){
+    str.append(added);
 }
 
 std::string ZLStringUtil::numberToString(unsigned int n) {

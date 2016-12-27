@@ -43,7 +43,7 @@ ZLTextModel::ZLTextModel(const std::string &id, const std::string &language, con
 	myFontManager(fontManager) {
 }
 ZLTextModel::ZLTextModel(const std::string &id, const std::string &language, const std::size_t rowSize,
-                         const std::string &directoryName, const std::string &fileExtension, FontManager &fontManager, const int booktype, const std::size_t bookcid) :
+                         const std::string &directoryName, const std::string &fileExtension, FontManager &fontManager, const int booktype, const std::string bookcid) :
 myId(id),
 myLanguage(language.empty() ? ZLibrary::Language() : language),
 myAllocator(new ZLCachedMemoryAllocator(rowSize, directoryName, fileExtension, booktype, bookcid)),
@@ -146,7 +146,7 @@ void ZLTextModel::addParagraphInternal(ZLTextParagraph *paragraph) {
 }
 
 ZLTextPlainModel::ZLTextPlainModel(const std::string &id, const std::string &language, const std::size_t rowSize,
-                                   const std::string &directoryName, const std::string &fileExtension, FontManager &fontManager, const int booktype, const std::size_t bookcid) :
+                                   const std::string &directoryName, const std::string &fileExtension, FontManager &fontManager, const int booktype, const std::string bookcid) :
 	ZLTextModel(id, language, rowSize, directoryName, fileExtension, fontManager, booktype, bookcid) {
 }
 

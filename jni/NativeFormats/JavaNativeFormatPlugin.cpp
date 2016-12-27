@@ -21,6 +21,8 @@
 #include <JniEnvelope.h>
 #include <ZLFileImage.h>
 #include <FileEncryptionInfo.h>
+#include <sstream>
+#include <ZLLogger.h>
 
 #include "fbreader/src/bookmodel/BookModel.h"
 #include "fbreader/src/formats/FormatPlugin.h"
@@ -226,7 +228,10 @@ static jobject createTextModel(JNIEnv *env, jobject javaModel, ZLTextModel &mode
     
     jobject javaBook = AndroidUtil::Field_BookModel_Book->value(javaModel);
     jint bookType = AndroidUtil::Method_Book_getBookTypeInt->call(javaBook);
-    jlong bookCid = AndroidUtil::Method_Book_getCid->call(javaBook);
+    std::string bookCid = AndroidUtil::Method_Book_getCid->callForCppString(javaBook);
+    jstring bookCidLong = AndroidUtil::createJavaString(env, bookCid);
+    
+    ZLLogger::Instance().logE("liuyu", "createTextModel:"+bookCid);
 
 	jobject textModel = AndroidUtil::Method_BookModel_createTextModel->call(
 		javaModel,
@@ -234,7 +239,7 @@ static jobject createTextModel(JNIEnv *env, jobject javaModel, ZLTextModel &mode
 		paragraphsNumber, entryIndices, entryOffsets,
 		paragraphLenghts, textSizes, paragraphKinds,
 		directoryName, fileExtension, blocksNumber,
-        bookType, bookCid
+        bookType, bookCidLong
 	);
 
 	if (env->ExceptionCheck()) {

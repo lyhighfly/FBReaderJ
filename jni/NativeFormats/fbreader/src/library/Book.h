@@ -43,7 +43,7 @@ public:
 		const std::string &language,
 		const std::string &title,
         const int booktype,
-        const std::size_t cid
+        const std::string cid
 	);
 
 	static shared_ptr<Book> loadFromFile(const ZLFile &file);
@@ -66,7 +66,7 @@ public: // unmodifiable book methods
 	const std::string &encoding() const;
 	const std::string &seriesTitle() const;
 	const std::string &indexInSeries() const;
-    const std::size_t &bookCid() const;
+    const std::string &bookCid() const;
     const int &bookType() const;
 
 	const TagList &tags() const;
@@ -79,7 +79,7 @@ public: // modifiable book methods
 	void setEncoding(const std::string &encoding);
 	void setSeries(const std::string &title, const std::string &index);
     void setBookType(const int booktype);
-    void setBookCid(const std::size_t cid);
+    void setBookCid(const std::string cid);
 
 public:
 	bool addTag(shared_ptr<Tag> tag);
@@ -106,7 +106,8 @@ private:
 	int myBookId;
 
     int myBookType;
-    std::size_t myBookCid;
+    std::string myBookCid;
+    
 	const ZLFile myFile;
 	std::string myTitle;
 	std::string myLanguage;
@@ -147,7 +148,7 @@ inline const std::string &Book::encoding() const { return myEncoding; }
 inline const std::string &Book::seriesTitle() const { return mySeriesTitle; }
 inline const std::string &Book::indexInSeries() const { return myIndexInSeries; }
 inline const int &Book::bookType() const {return myBookType;}
-inline const std::size_t &Book::bookCid() const {return myBookCid;}
+inline const std::string &Book::bookCid() const {return myBookCid;}
 
 inline const TagList &Book::tags() const { return myTags; }
 inline const AuthorList &Book::authors() const { return myAuthors; }
