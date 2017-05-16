@@ -22,6 +22,8 @@
 #include "TxtBookReader.h"
 #include "../../bookmodel/BookModel.h"
 
+#include <sstream>
+
 TxtBookReader::TxtBookReader(BookModel &model, const PlainTextFormat &format, const std::string &encoding) : TxtReader(encoding), BookReader(model), myFormat(format) {
 }
 
@@ -38,21 +40,24 @@ void TxtBookReader::internalEndParagraph() {
 bool TxtBookReader::characterDataHandler(std::string &str) {
 	const char *ptr = str.data();
 	const char *end = ptr + str.length();
+    bool haveSpace = false;
 	for (; ptr != end; ++ptr) {
 		if (std::isspace((unsigned char)*ptr)) {
 			if (*ptr != '\t') {
-				++mySpaceCounter;
+                ++mySpaceCounter;
 			} else {
 				mySpaceCounter += myFormat.ignoredIndent() + 1; // TODO: implement single option in PlainTextFormat
-			}
+            }
+            haveSpace = true;
 		} else {
-			myLastLineIsEmpty = false;
+            myLastLineIsEmpty = false;
 			break;
 		}
 	}
+    
 	if (ptr != end) {
 		if ((myFormat.breakType() & PlainTextFormat::BREAK_PARAGRAPH_AT_LINE_WITH_INDENT) &&
-				myNewLine && (mySpaceCounter > myFormat.ignoredIndent())) {
+				myNewLine && ((mySpaceCounter > myFormat.ignoredIndent()) || !haveSpace)) {
 			internalEndParagraph();
 			beginParagraph();
 		}

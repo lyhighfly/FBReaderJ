@@ -112,7 +112,6 @@ shared_ptr<Book> Book::loadFromJavaBook(JNIEnv *env, jobject javaBook) {
     std::stringstream stream1;
     stream1<<booktype;
     
-    
     ZLLogger::Instance().logE("liuyu", "get BookType:"+stream1.str()+"  cid:"+cid);
 	return createBook(ZLFile(path), 0, encoding, language, title, booktype, cid);
 }

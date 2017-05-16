@@ -81,6 +81,7 @@ void TxtReader::readDocument(ZLInputStream &stream) {
 	if (!stream.open()) {
 		return;
 	}
+  
 	startDocumentHandler();
 	myCore->readDocument(stream);
 	endDocumentHandler();
@@ -105,10 +106,11 @@ void TxtReaderCore::readDocument(ZLInputStream &stream) {
 		for (char *ptr = start; ptr != end; ++ptr) {
 			if (*ptr == '\n' || *ptr == '\r') {
 				bool skipNewLine = false;
-				if (*ptr == '\r' && (ptr + 1) != end && *(ptr + 1) == '\n') {
+				if ((*ptr == '\n' && (ptr+1) != end) || (*ptr == '\r' && (ptr + 1) != end && *(ptr + 1) == '\n')) {
 					skipNewLine = true;
 					*ptr = '\n';
 				}
+               
 				if (start != ptr) {
 					str.erase();
 					myReader.myConverter->convert(str, start, ptr + 1);

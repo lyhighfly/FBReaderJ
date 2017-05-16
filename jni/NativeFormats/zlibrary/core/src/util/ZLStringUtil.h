@@ -35,7 +35,6 @@ public:
 	static void appendNumber(std::string &str, unsigned int n);
 	static std::string numberToString(unsigned int n);
 	static void append(std::string &str, const std::vector<std::string> &buffer);
-    static void appendLong(std::string &str, const std::size_t n);
     static void appendStr(std::string &str, const std::string &added);
 	static void stripWhiteSpaces(std::string &str);
 

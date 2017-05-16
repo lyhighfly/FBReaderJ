@@ -28,7 +28,6 @@
 #include <ZLOutputStream.h>
 #include <ZLStringUtil.h>
 #include <ZLLogger.h>
-#include <sstream>
 
 #include "ZLCachedMemoryAllocator.h"
 
