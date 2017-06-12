@@ -153,6 +153,7 @@ public:
 	static shared_ptr<VoidMethod> Method_Book_addUid;
     static shared_ptr<IntMethod> Method_Book_getBookTypeInt;
     static shared_ptr<StringMethod> Method_Book_getCid;
+    static shared_ptr<StringMethod> Method_Book_getBid;
 
 	static shared_ptr<StaticObjectMethod> StaticMethod_Tag_getTag;
 

@@ -116,6 +116,7 @@ shared_ptr<VoidMethod> AndroidUtil::Method_Book_addTag;
 shared_ptr<VoidMethod> AndroidUtil::Method_Book_addUid;
 shared_ptr<IntMethod> AndroidUtil::Method_Book_getBookTypeInt;
 shared_ptr<StringMethod> AndroidUtil::Method_Book_getCid;
+shared_ptr<StringMethod> AndroidUtil::Method_Book_getBid;
 
 shared_ptr<StaticObjectMethod> AndroidUtil::StaticMethod_Tag_getTag;
 
@@ -199,6 +200,7 @@ bool AndroidUtil::init(JavaVM* jvm) {
 	Method_Book_addUid = new VoidMethod(Class_AbstractBook, "addUid", "(Ljava/lang/String;Ljava/lang/String;)");
     Method_Book_getBookTypeInt = new IntMethod(Class_AbstractBook, "getBookTypeInt","()");
     Method_Book_getCid = new StringMethod(Class_AbstractBook, "getCid", "()");
+    Method_Book_getBid = new StringMethod(Class_AbstractBook, "getBid", "()");
     
 
 	StaticMethod_Tag_getTag = new StaticObjectMethod(Class_Tag, "getTag", Class_Tag, "(Lorg/geometerplus/fbreader/book/Tag;Ljava/lang/String;)");

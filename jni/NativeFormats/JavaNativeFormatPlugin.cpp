@@ -305,9 +305,9 @@ JNIEXPORT jint JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPlugin
 		return 3;
 	}
 
-	if (!initInternalHyperlinks(env, javaModel, *model, cacheDir)) {
-		return 4;
-	}
+//	if (!initInternalHyperlinks(env, javaModel, *model, cacheDir)) {
+//		return 4;
+//	}
 
 	initTOC(env, javaModel, *model->contentsTree());
 
@@ -325,54 +325,54 @@ JNIEXPORT jint JNICALL Java_org_geometerplus_fbreader_formats_NativeFormatPlugin
     
 	env->DeleteLocalRef(javaTextModel);
 
-	const std::map<std::string,shared_ptr<ZLTextModel> > &footnotes = model->footnotes();
-	std::map<std::string,shared_ptr<ZLTextModel> >::const_iterator it = footnotes.begin();
-	for (; it != footnotes.end(); ++it) {
-		jobject javaFootnoteModel = createTextModel(env, javaModel, *it->second);
-		if (javaFootnoteModel == 0) {
-			return 7;
-		}
-		AndroidUtil::Method_BookModel_setFootnoteModel->call(javaModel, javaFootnoteModel);
-		if (env->ExceptionCheck()) {
-			return 8;
-		}
-		env->DeleteLocalRef(javaFootnoteModel);
-	}
-    
-
-	const std::vector<std::vector<std::string> > familyLists = model->fontManager().familyLists();
-	for (std::vector<std::vector<std::string> >::const_iterator it = familyLists.begin(); it != familyLists.end(); ++it) {
-		const std::vector<std::string> &lst = *it;
-		jobjectArray jList = env->NewObjectArray(lst.size(), AndroidUtil::Class_java_lang_String.j(), 0);
-		for (std::size_t i = 0; i < lst.size(); ++i) {
-			JString jString(env, lst[i]);
-			env->SetObjectArrayElement(jList, i, jString.j());
-		}
-		AndroidUtil::Method_BookModel_registerFontFamilyList->call(javaModel, jList);
-		env->DeleteLocalRef(jList);
-	}
-   
-
-	const std::map<std::string,shared_ptr<FontEntry> > entries = model->fontManager().entries();
-	for (std::map<std::string,shared_ptr<FontEntry> >::const_iterator it = entries.begin(); it != entries.end(); ++it) {
-		if (it->second.isNull()) {
-			continue;
-		}
-		JString family(env, it->first);
-		jobject normal = createJavaFileInfo(env, it->second->Normal);
-		jobject bold = createJavaFileInfo(env, it->second->Bold);
-		jobject italic = createJavaFileInfo(env, it->second->Italic);
-		jobject boldItalic = createJavaFileInfo(env, it->second->BoldItalic);
-
-		AndroidUtil::Method_BookModel_registerFontEntry->call(
-			javaModel, family.j(), normal, bold, italic, boldItalic
-		);
-
-		if (boldItalic != 0) env->DeleteLocalRef(boldItalic);
-		if (italic != 0) env->DeleteLocalRef(italic);
-		if (bold != 0) env->DeleteLocalRef(bold);
-		if (normal != 0) env->DeleteLocalRef(normal);
-	}
+//	const std::map<std::string,shared_ptr<ZLTextModel> > &footnotes = model->footnotes();
+//	std::map<std::string,shared_ptr<ZLTextModel> >::const_iterator it = footnotes.begin();
+//	for (; it != footnotes.end(); ++it) {
+//		jobject javaFootnoteModel = createTextModel(env, javaModel, *it->second);
+//		if (javaFootnoteModel == 0) {
+//			return 7;
+//		}
+//		AndroidUtil::Method_BookModel_setFootnoteModel->call(javaModel, javaFootnoteModel);
+//		if (env->ExceptionCheck()) {
+//			return 8;
+//		}
+//		env->DeleteLocalRef(javaFootnoteModel);
+//	}
+//    
+//
+//	const std::vector<std::vector<std::string> > familyLists = model->fontManager().familyLists();
+//	for (std::vector<std::vector<std::string> >::const_iterator it = familyLists.begin(); it != familyLists.end(); ++it) {
+//		const std::vector<std::string> &lst = *it;
+//		jobjectArray jList = env->NewObjectArray(lst.size(), AndroidUtil::Class_java_lang_String.j(), 0);
+//		for (std::size_t i = 0; i < lst.size(); ++i) {
+//			JString jString(env, lst[i]);
+//			env->SetObjectArrayElement(jList, i, jString.j());
+//		}
+//		AndroidUtil::Method_BookModel_registerFontFamilyList->call(javaModel, jList);
+//		env->DeleteLocalRef(jList);
+//	}
+//   
+//
+//	const std::map<std::string,shared_ptr<FontEntry> > entries = model->fontManager().entries();
+//	for (std::map<std::string,shared_ptr<FontEntry> >::const_iterator it = entries.begin(); it != entries.end(); ++it) {
+//		if (it->second.isNull()) {
+//			continue;
+//		}
+//		JString family(env, it->first);
+//		jobject normal = createJavaFileInfo(env, it->second->Normal);
+//		jobject bold = createJavaFileInfo(env, it->second->Bold);
+//		jobject italic = createJavaFileInfo(env, it->second->Italic);
+//		jobject boldItalic = createJavaFileInfo(env, it->second->BoldItalic);
+//
+//		AndroidUtil::Method_BookModel_registerFontEntry->call(
+//			javaModel, family.j(), normal, bold, italic, boldItalic
+//		);
+//
+//		if (boldItalic != 0) env->DeleteLocalRef(boldItalic);
+//		if (italic != 0) env->DeleteLocalRef(italic);
+//		if (bold != 0) env->DeleteLocalRef(bold);
+//		if (normal != 0) env->DeleteLocalRef(normal);
+//	}
 
 	return 0;
 }
